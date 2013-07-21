@@ -5,12 +5,9 @@ module.exports = function htmlToAssertion(dom, rootNode, baseURL) {
   var parser = new microformat.Parser();
   var out = parser.get(dom, rootNode, parser.options);
   var badge = out.data.items[0].properties;
-  var saltedId = badge['recipient-salted-identity'][0].split(':', 2);
   var issuer = url.parse(badge.issuer[0]);
   var errors = [];
   var assertion = {
-    recipient: saltedId[0],
-    salt: saltedId[1],
     evidence: baseURL,
     issued_on: badge.issuance[0],
     badge: {
@@ -25,6 +22,15 @@ module.exports = function htmlToAssertion(dom, rootNode, baseURL) {
       }
     }
   };
+
+  if ('recipient-salted-identity' in badge) {
+    var saltedId = badge['recipient-salted-identity'][0].split(':', 2);
+    assertion.recipient = saltedId[0];
+    assertion.salt = saltedId[1];
+  } else {
+    var mailto = url.parse(badge.recipient[0].properties.url[0]);
+    assertion.recipient = mailto.auth + '@' + mailto.hostname;
+  }
 
   // TODO: Ensure that issuer anchor exists and is absolute.
 

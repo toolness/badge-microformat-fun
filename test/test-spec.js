@@ -61,6 +61,17 @@ describe("htmlToAssertion", function() {
     }]);
   });
 
+  it("works with mailto: recipient", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    mediaCardDom(".p-recipient").attr("href", "mailto:foo@bar.org");
+    mediaCardDom(".p-recipient-salted-identity").remove();
+    var result = htmlToAssertion(mediaCardDom, mediaCardDom.root(),
+                                 'http://webmaker.org/badge/1');
+    expect(result.errors.length).to.equal(0);
+    expect(result.assertion.recipient).to.eql("foo@bar.org");
+    expect('salt' in result.assertion).to.equal(false);
+  });
+
   it("works as expected", function() {
     var mediaCardDom = cheerio.load(mediaCardHtml);
     var result = htmlToAssertion(mediaCardDom, mediaCardDom.root(),
