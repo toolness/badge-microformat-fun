@@ -6,7 +6,7 @@ var expect = require('expect.js');
 
 var htmlToAssertion = require('../html-to-assertion');
 
-var sampleDir = __dirname + '/../sample';
+var sampleDir = __dirname + '/../static/sample';
 var mediaCardHtml = fs.readFileSync(sampleDir + '/media-card.html', 'utf-8');
 
 describe("microformat-node", function() {
