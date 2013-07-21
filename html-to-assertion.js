@@ -1,7 +1,7 @@
 var url = require('url');
 var microformat = require('microformat-node');
 
-module.exports = function htmlToAssertion(dom, rootNode, baseURL) {
+function htmlToAssertion(dom, rootNode, baseURL) {
   var parser = new microformat.Parser();
   var out = parser.get(dom, rootNode, parser.options);
   var badge = out.data.items[0].properties;
@@ -44,4 +44,13 @@ module.exports = function htmlToAssertion(dom, rootNode, baseURL) {
     errors: errors,
     assertion: assertion
   };
+}
+
+htmlToAssertion.findAll = function findAll(dom, baseURL) {
+  return dom.root().find(".h-badge").map(function() {
+    var id = this.attr("id");
+    return htmlToAssertion(dom, this, baseURL + (id ? '#' + id : ''));
+  });
 };
+
+module.exports = htmlToAssertion;

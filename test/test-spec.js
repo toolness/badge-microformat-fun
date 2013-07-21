@@ -94,3 +94,26 @@ describe("htmlToAssertion", function() {
     });
   });
 });
+
+describe("htmlToAssertion.findAll()", function() {
+  it("adds hash to URL when id is present on badges", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    mediaCardDom.root().find(".h-badge").attr("id", "1");
+    var results = htmlToAssertion.findAll(mediaCardDom,
+                                          'http://webmaker.org/badges');
+    expect(results.length).to.equal(1);
+    expect(results[0].errors.length).to.equal(0);
+    expect(results[0].assertion.evidence)
+      .to.eql('http://webmaker.org/badges#1');
+  });
+
+  it("works as expected", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    var results = htmlToAssertion.findAll(mediaCardDom,
+                                          'http://webmaker.org/badge/1');
+    expect(results.length).to.equal(1);
+    expect(results[0].errors.length).to.equal(0);
+    expect(results[0].assertion.evidence)
+      .to.eql('http://webmaker.org/badge/1');
+  });
+});
