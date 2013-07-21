@@ -7,6 +7,7 @@ module.exports = function htmlToAssertion(dom, rootNode, baseURL) {
   var badge = out.data.items[0].properties;
   var saltedId = badge['recipient-salted-identity'][0].split(':', 2);
   var issuer = url.parse(badge.issuer[0]);
+  var errors = [];
   var assertion = {
     recipient: saltedId[0],
     salt: saltedId[1],
@@ -25,8 +26,16 @@ module.exports = function htmlToAssertion(dom, rootNode, baseURL) {
     }
   };
 
+  // TODO: Ensure that issuer anchor exists and is absolute.
+
+  if (rootNode.find("[rel=nofollow]").length)
+    errors.push({
+      code: "REL_NOFOLLOW_FOUND",
+      message: "One or more elements are rel=\"nofollow\""
+    });
+
   return {
-    errors: [],
+    errors: errors,
     assertion: assertion
   };
 };

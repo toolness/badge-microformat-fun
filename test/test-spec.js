@@ -49,6 +49,18 @@ describe("microformat-node", function() {
 });
 
 describe("htmlToAssertion", function() {
+  it("reports errors when rel=\"nofollow\" links are present", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    mediaCardDom(".u-issuer").attr("rel", "nofollow");
+    var result = htmlToAssertion(mediaCardDom, mediaCardDom.root(),
+                                 'http://webmaker.org/badge/1');
+
+    expect(result.errors).to.eql([{
+      code: "REL_NOFOLLOW_FOUND",
+      message: "One or more elements are rel=\"nofollow\""
+    }]);
+  });
+
   it("works as expected", function() {
     var mediaCardDom = cheerio.load(mediaCardHtml);
     var result = htmlToAssertion(mediaCardDom, mediaCardDom.root(),
