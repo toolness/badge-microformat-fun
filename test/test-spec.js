@@ -46,7 +46,7 @@ describe("microformat-node", function() {
   });
 });
 
-describe("htmlToAssertion", function() {
+describe("htmlToAssertion()", function() {
   it("reports errors when rel=\"nofollow\" links are present", function() {
     var mediaCardDom = cheerio.load(mediaCardHtml);
     mediaCardDom(".u-issuer").attr("rel", "nofollow");
@@ -92,6 +92,51 @@ describe("htmlToAssertion", function() {
         }
       }
     });
+  });
+});
+
+describe("htmlToAssertion.findUnique()", function() {
+  it("works w/ a page w/ one badge w/ no id", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    var result = htmlToAssertion.findUnique(mediaCardDom,
+                                            'http://webmaker.org/badge/1');
+    expect(result.errors.length).to.eql(0);
+    expect(result.assertion.evidence).to.eql('http://webmaker.org/badge/1');
+  });
+
+  it("fails when there is no match", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    var result = htmlToAssertion.findUnique(mediaCardDom,
+                                            'http://webmaker.org/badges#2');
+    expect(result.errors).to.eql([{
+      code: 'NOT_FOUND',
+      message: 'no results found'      
+    }]);
+  });
+
+  it("fails w/ a page w/ two badges w/ no id", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    mediaCardDom(".container").append(mediaCardDom(".h-badge").clone());
+    var result = htmlToAssertion.findUnique(mediaCardDom,
+                                            'http://webmaker.org/badge/1');
+    expect(result.errors).to.eql([{
+      code: 'AMBIGUOUS_MATCH',
+      message: 'multiple results found'      
+    }]);
+  });
+
+  it("works w/ a page w/ two badges w/ unique ids", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    var badge1 = mediaCardDom(".h-badge");
+    var badge2 = badge1.clone();
+    badge1.attr("id", "1");
+    badge2.attr("id", "2");
+    mediaCardDom(".container").append(badge2);
+
+    var result = htmlToAssertion.findUnique(mediaCardDom,
+                                            'http://webmaker.org/badges#2');
+    expect(result.errors.length).to.eql(0);
+    expect(result.assertion.evidence).to.eql('http://webmaker.org/badges#2');
   });
 });
 

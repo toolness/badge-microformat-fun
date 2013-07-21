@@ -1,6 +1,18 @@
 var url = require('url');
 var microformat = require('microformat-node');
 
+function splitHash(fullURL) {
+  var parts = url.parse(fullURL);
+  var hash = parts.hash || '';
+
+  parts.hash = '';
+  return {
+    baseURL: url.format(parts),
+    hash: hash,
+    id: hash.slice(1)
+  };
+}
+
 function htmlToAssertion(dom, rootNode, baseURL) {
   var parser = new microformat.Parser();
   var out = parser.get(dom, rootNode, parser.options);
@@ -45,6 +57,28 @@ function htmlToAssertion(dom, rootNode, baseURL) {
     assertion: assertion
   };
 }
+
+htmlToAssertion.findUnique = function findUnique(dom, fullURL) {
+  var info = splitHash(fullURL);
+  var rootNode = dom.root().find(info.hash + ".h-badge");
+
+  if (rootNode.length == 0) {
+    return {
+      errors: [{
+        code: 'NOT_FOUND',
+        message: 'no results found'
+      }]
+    }
+  } else if (rootNode.length > 1) {
+    return {
+      errors: [{
+        code: 'AMBIGUOUS_MATCH',
+        message: 'multiple results found'
+      }]
+    }    
+  }
+  return htmlToAssertion(dom, rootNode, fullURL);
+};
 
 htmlToAssertion.findAll = function findAll(dom, baseURL) {
   return dom.root().find(".h-badge").map(function() {
