@@ -4,7 +4,7 @@ var microformat = require('microformat-node');
 var cheerio = require('cheerio');
 var expect = require('expect.js');
 
-var microformatToAssertion = require('../microformat-to-assertion');
+var htmlToAssertion = require('../html-to-assertion');
 
 var sampleDir = __dirname + '/../sample';
 var mediaCardHtml = fs.readFileSync(sampleDir + '/media-card.html', 'utf-8');
@@ -48,11 +48,11 @@ describe("microformat-node", function() {
   });
 });
 
-describe("microformatToAssertion", function() {
+describe("htmlToAssertion", function() {
   it("works as expected", function() {
     var mediaCardDom = cheerio.load(mediaCardHtml);
-    var result = microformatToAssertion(mediaCardDom, mediaCardDom.root(),
-                                        'http://webmaker.org/badge/1');
+    var result = htmlToAssertion(mediaCardDom, mediaCardDom.root(),
+                                 'http://webmaker.org/badge/1');
     expect(result.errors.length).to.equal(0);
     expect(result.assertion).to.eql({
       recipient: 'sha256$c7ef86405ba71b85acd8e2e95166c4b111448089f2e1599f42fe1bba46e865c5',
