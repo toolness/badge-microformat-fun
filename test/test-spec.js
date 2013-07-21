@@ -7,15 +7,13 @@ var expect = require('expect.js');
 var microformatToAssertion = require('../microformat-to-assertion');
 
 var sampleDir = __dirname + '/../sample';
-
 var mediaCardHtml = fs.readFileSync(sampleDir + '/media-card.html', 'utf-8');
-var mediaCardDom = cheerio.load(mediaCardHtml);
 
 describe("microformat-node", function() {
   it("parses microformats as expected", function() {
     var parser = new microformat.Parser();
-    var rootNode = mediaCardDom.root();
-    var out = parser.get(mediaCardDom, rootNode, parser.options);
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    var out = parser.get(mediaCardDom, mediaCardDom.root(), parser.options);
     var badge = out.data.items[0].properties;
 
     expect(out.errors).to.equal(null);
@@ -52,7 +50,8 @@ describe("microformat-node", function() {
 
 describe("microformatToAssertion", function() {
   it("works as expected", function() {
-    var result = microformatToAssertion(mediaCardHtml,
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    var result = microformatToAssertion(mediaCardDom, mediaCardDom.root(),
                                         'http://webmaker.org/badge/1');
     expect(result.errors.length).to.equal(0);
     expect(result.assertion).to.eql({

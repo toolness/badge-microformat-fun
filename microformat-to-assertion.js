@@ -1,11 +1,9 @@
 var url = require('url');
 var microformat = require('microformat-node');
-var cheerio = require('cheerio');
 
-module.exports = function microformatToAssertion(html, baseURL) {
+module.exports = function microformatToAssertion(dom, rootNode, baseURL) {
   var parser = new microformat.Parser();
-  var dom = cheerio.load(html);
-  var out = parser.get(dom, dom.root(), parser.options);
+  var out = parser.get(dom, rootNode, parser.options);
   var badge = out.data.items[0].properties;
   var saltedId = badge['recipient-salted-identity'][0].split(':', 2);
   var issuer = url.parse(badge.issuer[0]);
