@@ -52,9 +52,10 @@ describe("microformat-node", function() {
 
 describe("microformatToAssertion", function() {
   it("works as expected", function() {
-    var assertion = microformatToAssertion(mediaCardHtml,
-                                           'http://webmaker.org/badge/1');
-    expect(assertion).to.eql({
+    var result = microformatToAssertion(mediaCardHtml,
+                                        'http://webmaker.org/badge/1');
+    expect(result.errors.length).to.equal(0);
+    expect(result.assertion).to.eql({
       recipient: 'sha256$c7ef86405ba71b85acd8e2e95166c4b111448089f2e1599f42fe1bba46e865c5',
       salt: 'deadsea',
       evidence: 'http://webmaker.org/badge/1',

@@ -9,8 +9,7 @@ module.exports = function microformatToAssertion(html, baseURL) {
   var badge = out.data.items[0].properties;
   var saltedId = badge['recipient-salted-identity'][0].split(':', 2);
   var issuer = url.parse(badge.issuer[0]);
-
-  return {
+  var assertion = {
     recipient: saltedId[0],
     salt: saltedId[1],
     evidence: baseURL,
@@ -26,5 +25,10 @@ module.exports = function microformatToAssertion(html, baseURL) {
         name: badge['issuer-name'][0]
       }
     }
+  };
+
+  return {
+    errors: [],
+    assertion: assertion
   };
 };
