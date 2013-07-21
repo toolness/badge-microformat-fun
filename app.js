@@ -11,12 +11,38 @@ var PORT = process.env.PORT || 3000;
 var ORIGIN = process.env.ORIGIN || 'http://localhost:' + PORT;
 var ISSUER_NAME = process.env.ISSUER_NAME || 'Badge Microformat Bridge';
 
+app.use(express.static(__dirname + '/static'));
+
 app.get('/assertion', function(req, res, next) {
   var fullURL = req.param('url') || '';
   var info = url.parse(fullURL);
+  var makeAssertion = function(body, issuerName, origin) {
+    var dom = cheerio.load(body);
+    try {
+      var result = htmlToAssertion.findUnique(dom, fullURL);
+    } catch (e) {
+      return res.type("text")
+        .send("unexpected exception parsing microformat: " + e);
+    }
+
+    var assertion = result.assertion;
+
+    if (result.errors.length)
+      return res.send({errors: result.errors}, 502);
+
+    assertion.badge.issuer.org = assertion.badge.issuer.name + " (via " +
+                                 assertion.badge.issuer.origin + ")";
+    assertion.badge.issuer.name = issuerName;
+    assertion.badge.issuer.origin = origin;
+
+    return res.send(assertion);
+  };
 
   if (!/^https?:/.test(info.protocol))
     return res.type('text').send('invalid URL', 400);
+
+  if (req.param('testHtml'))
+    return makeAssertion(req.param('testHtml'), 'TESTING MODE', '');
 
   request({
     url: fullURL,
@@ -31,19 +57,7 @@ app.get('/assertion', function(req, res, next) {
           typeof(body) == 'string'))
       return res.type('text').send('gateway response is not html', 502);
 
-    var dom = cheerio.load(body);
-    var result = htmlToAssertion.findUnique(dom, fullURL);
-    var assertion = result.assertion;
-
-    if (result.errors.length)
-      return res.send({errors: result.errors}, 502);
-
-    assertion.badge.issuer.org = assertion.badge.issuer.name + " (via " +
-                                 assertion.badge.issuer.origin + ")";
-    assertion.badge.issuer.name = ISSUER_NAME;
-    assertion.badge.issuer.origin = ORIGIN;
-
-    return res.send(assertion);
+    return makeAssertion(body, ISSUER_NAME, ORIGIN);
   });
 });
 
