@@ -24,8 +24,6 @@ describe("microformat-node", function() {
     expect(badge.issuance).to.eql([ '2012-01-01' ]);
     expect(badge.issuer).to.eql([ 'http://webmaker.org/' ]);
     expect(badge.description).to.eql([ 'Recipient can craft code comments.' ]);
-    expect(badge.criteria).to.match(/\<p\>The CodeWhisperer/);
-    expect(badge.evidence).to.match(/\<p\>Try viewing/);
     expect(badge['issuer-name']).to.eql([ 'Mozilla Webmaker' ]);
     expect(badge['recipient-salted-identity']).to.eql(['sha256$c7ef86405ba71b85acd8e2e95166c4b111448089f2e1599f42fe1bba46e865c5:deadsea']);
 
