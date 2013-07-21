@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/webmaker.css">
+<title>Badge Microformat Example</title>
+
+<div class="wrapper">
+  <section>
+    <div class="container">
+
+      <!-- Any class prefixed with h-, u-, e-, dt-, or p- is part of a microformat; everything else is optional, and has only been included for formatting purposes. See http://microformats.org/wiki/microformats-2 for more information. -->
+
+      <div class="media card h-badge">
+        <img class="img badge u-image" src="img/code-whisperer.png">
+        <div class="bd">
+          <hgroup>
+            <h1 class="p-name">Code Whisperer</h1>
+            <p class="p-description">Recipient can craft code comments.</p>
+            <p>Issued to 
+              <a class="p-recipient h-card" href="http://toolness.com/">Atul Varma</a>
+              <span class="p-recipient-salted-identity" style="display: none">sha256$c7ef86405ba71b85acd8e2e95166c4b111448089f2e1599f42fe1bba46e865c5:deadsea
+              </span> 
+              on
+              <time class="dt-issuance" datetime="2012-01-01">January 1<sup>st</sup>, 2012</time>
+              by
+              <a class="u-issuer p-issuer-name" href="http://webmaker.org/">Mozilla Webmaker</a>
+            </p>
+          </hgroup>
+          <dl class="dl-horizontal narrow-dt">
+            <dt>Criteria:</dt>
+            <dd class="e-criteria">
+              <p>The CodeWhisperer mini-badge is part of the Mozilla Webmaker series. It represents a general coding skill and is earned by adding explanatory and helpful comments to a Mozilla Webmaker Project.</p>
+
+              <p>It indicates that the earner has written code comments at least 3 times in Webmaker projects.</p>
+            </dd>
+            <dt>Evidence:</dt>
+            <dd class="e-evidence">
+              <p>Try viewing the source code of <a href="http://badgestudio.chicagosummeroflearning.org/">badgestudio.chicagosummeroflearning.org</a>.</p>
+              <p>It's good stuff.</p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
