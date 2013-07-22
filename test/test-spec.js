@@ -8,6 +8,7 @@ var htmlToAssertion = require('../html-to-assertion');
 
 var sampleDir = __dirname + '/../static/sample';
 var mediaCardHtml = fs.readFileSync(sampleDir + '/media-card.html', 'utf-8');
+var simpleHtml = fs.readFileSync(sampleDir + '/simple.html', 'utf-8');
 
 describe("microformat-node", function() {
   it("parses microformats as expected", function() {
@@ -43,6 +44,17 @@ describe("microformat-node", function() {
         }
       }
     ]);
+  });
+
+  it("parses semantically equivalent microformats", function() {
+    var parser = new microformat.Parser();
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    var simpleDom = cheerio.load(simpleHtml);
+    var mediaCard = parser.get(mediaCardDom, mediaCardDom.root(),
+                               parser.options);
+    var simple = parser.get(simpleDom, simpleDom.root(), parser.options);
+
+    expect(mediaCard).to.eql(simple);
   });
 });
 
