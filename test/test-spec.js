@@ -59,6 +59,17 @@ describe("htmlToAssertion()", function() {
     }]);
   });
 
+  it("reports errors when issuer origin is not host origin", function() {
+    var mediaCardDom = cheerio.load(mediaCardHtml);
+    var result = htmlToAssertion(mediaCardDom, mediaCardDom.root(),
+                                 'http://fake-webmaker.org/badge/1');
+
+    expect(result.errors).to.eql([{
+      code: "ISSUER_ORIGIN_MISMATCH",
+      message: "Origin of issuer does not match origin of hosted HTML"
+    }]);
+  });
+
   it("works with mailto: recipient", function() {
     var mediaCardDom = cheerio.load(mediaCardHtml);
     mediaCardDom(".p-recipient").attr("href", "mailto:foo@bar.org");

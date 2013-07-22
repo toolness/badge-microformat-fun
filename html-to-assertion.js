@@ -18,6 +18,7 @@ function htmlToAssertion(dom, rootNode, baseURL) {
   var out = parser.get(dom, rootNode, parser.options);
   var badge = out.data.items[0].properties;
   var issuer = url.parse(badge.issuer[0]);
+  var base = url.parse(baseURL);
   var errors = [];
   var assertion = {
     evidence: baseURL,
@@ -34,6 +35,12 @@ function htmlToAssertion(dom, rootNode, baseURL) {
       }
     }
   };
+
+  if (assertion.badge.issuer.origin != base.protocol + '//' + base.host)
+    errors.push({
+      code: 'ISSUER_ORIGIN_MISMATCH',
+      message: 'Origin of issuer does not match origin of hosted HTML'
+    });
 
   if ('recipient-salted-identity' in badge) {
     var saltedId = badge['recipient-salted-identity'][0].split(':', 2);
