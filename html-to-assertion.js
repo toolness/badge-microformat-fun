@@ -42,13 +42,21 @@ function htmlToAssertion(dom, rootNode, baseURL) {
       message: 'Origin of issuer does not match origin of hosted HTML'
     });
 
-  if ('recipient-salted-identity' in badge) {
-    var saltedId = badge['recipient-salted-identity'][0].split(':', 2);
-    assertion.recipient = saltedId[0];
-    assertion.salt = saltedId[1];
+  var identity = url.parse(badge.recipient[0].properties.url[0], true);
+
+  if (identity.protocol == 'mailto:') {
+    assertion.recipient = identity.auth + '@' + identity.hostname;
+  } else if (identity.protocol == 'hmailto:') {
+    assertion.recipient = identity.query.hashfunc + '$' + identity.hostname;
+    // For some reason url.parse() limits the hostname to 63 characters and
+    // puts the rest in the pathname.
+    assertion.recipient += identity.pathname.slice(1);
+    assertion.salt = identity.query.salt;
   } else {
-    var mailto = url.parse(badge.recipient[0].properties.url[0]);
-    assertion.recipient = mailto.auth + '@' + mailto.hostname;
+    errors.push({
+      code: 'UNKNOWN_RECIPIENT_PROTOCOL',
+      message: 'Unkown recipient protocol'
+    });
   }
 
   // TODO: Ensure that issuer anchor exists and is absolute.
