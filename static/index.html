@@ -1,9 +1,46 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link rel="stylesheet" href="google-code-prettify/prettify.css">
 <title>Badge Microformat Fun</title>
 <h1>Badge Microformat Fun</h1>
 
 <p>For an example, see <a href="sample/media-card.html">here</a>.</p>
+
+<h2>Build a Badge</h2>
+
+<form id="build">
+  <p>Badge Name</p>
+  <input type="text" size="80" name="name">
+
+  <p>Badge Image URL</p>
+  <input type="text" size="80" name="image">
+
+  <p>Short Badge Description</p>
+  <input type="text" size="80" name="description">
+
+  <p>Recipient Name</p>
+  <input type="text" size="80" name="recipient-name">
+
+  <p>Recipient Email</p>
+  <input type="text" size="80" name="recipient">
+
+  <input type="checkbox" name="hash"> Hash
+
+  <p>Issuance Date (yyyy-mm-dd)</p>
+  <input type="text" name="issuance">
+
+  <p>Issuer Name</p>
+  <input type="text" size="80" name="issuer-name">
+
+  <p>Issuer URL</p>
+  <input type="text" size="80" name="issuer">
+</form>
+
+<h3>Badge HTML</h3>
+
+<pre id="badge-html"></pre>
+
+<h2>Validate a Badge</h2>
 
 <form action="/assertion">
   <p>URL</p>
@@ -14,3 +51,69 @@
 
   <p><input type="submit"></p>
 </form>
+
+<div id="badge-template" style="display: none"><div class="h-badge">
+  <h3 class="p-name"></h3>
+  <img class="u-image">
+  <p class="p-description"></p>
+  <p>
+    This badge is awarded to
+    <a class="p-recipient h-card"></a>
+    on
+    <time class="dt-issuance"></time>
+    by
+    <a class="u-issuer p-issuer-name"></a>,
+    in recognition of their awesomeness.
+  </p>
+</div></div>
+
+<script src="sha256.js"></script>
+<script src="moment.min.js"></script>
+<script src="google-code-prettify/prettify.js"></script>
+<script>
+var SALT = "deadsea";
+
+onload = function() {
+  var $ = function(selector, element) {
+    return (element || document).querySelector(selector);
+  };
+  var buildForm = $("#build");
+  var badge = $("#badge-template .h-badge");
+  var generateBadge = function() {
+    var recipientUrl;
+    var issueDate = moment($("[name=issuance]").value,
+                           "YYYY-MM-DD");
+
+    $(".p-name", badge).textContent = $("[name=name]").value;
+    $(".u-image", badge).setAttribute("src", $("[name=image]").value);
+    $(".p-description", badge).textContent = $("[name=description]").value;
+    $(".p-recipient", badge).textContent = $("[name=recipient-name]").value;
+
+    if ($("[name=hash]").checked)
+      recipientUrl = "hmailto:" +
+                     Sha256.hash($("[name=recipient]").value + SALT) +
+                     "?hashfunc=sha256&salt=" +
+                     encodeURIComponent(SALT);
+    else
+      recipientUrl = "mailto:" + $("[name=recipient]").value;
+
+    $(".p-recipient", badge).setAttribute("href", recipientUrl);
+
+    $(".dt-issuance", badge).textContent = issueDate
+                                           ? issueDate.format("MMMM Do YYYY")
+                                           : "";
+    $(".dt-issuance", badge).setAttribute("datetime",
+                                          $("[name=issuance]").value);
+
+    $(".u-issuer", badge).setAttribute("href", $("[name=issuer]").value);
+    $(".p-issuer-name", badge).textContent = $("[name=issuer-name]").value;
+
+    $("#badge-html").textContent = $("#badge-template").innerHTML;
+    $("#badge-html").innerHTML = prettyPrintOne($("#badge-html").innerHTML,
+                                                  'html');
+  };
+  buildForm.addEventListener("keyup", generateBadge, false);
+  buildForm.addEventListener("change", generateBadge, false);
+  generateBadge();
+};
+</script>
