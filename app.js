@@ -10,7 +10,7 @@ var app = express();
 var PORT = process.env.PORT || 3000;
 var ORIGIN = process.env.ORIGIN || 'http://localhost:' + PORT;
 var ISSUER_NAME = process.env.ISSUER_NAME || 'Badge Microformat Bridge';
-var ISSUER_ORG = process.env.ISSUER_ORG || '%n (via %o)';
+var ISSUER_ORG = process.env.ISSUER_ORG || '%n (via %d)';
 
 app.use(express.static(__dirname + '/static'));
 
@@ -33,7 +33,8 @@ app.get('/assertion', function(req, res, next) {
 
     assertion.badge.issuer.org = ISSUER_ORG
       .replace('%n', assertion.badge.issuer.name)
-      .replace('%o', assertion.badge.issuer.origin);
+      .replace('%o', assertion.badge.issuer.origin)
+      .replace('%d', url.parse(assertion.badge.issuer.origin).host);
     assertion.badge.issuer.name = issuerName;
     assertion.badge.issuer.origin = origin;
 
