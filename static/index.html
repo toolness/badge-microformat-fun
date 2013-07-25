@@ -2,6 +2,15 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="google-code-prettify/prettify.css">
+<style>
+body:not(.valid-form) .valid-form-only {
+  display: none;
+}
+
+body.valid-form .invalid-form-only {
+  display: none;
+}
+</style>
 <title>Badge Microformat Fun</title>
 <div class="container">
 <h1>Badge Microformat Fun</h1>
@@ -47,9 +56,24 @@
   </fieldset>
 </form>
 
-<p>Below is your badge's HTML.</p>
+<div class="valid-form-only">
+  <p>Below is your badge's HTML. Copy and paste it into a blog or other web
+    page hosted at <a id="issuer-domain"></a>.
+  </p>
+</div>
+
+<div class="invalid-form-only alert alert-error">
+  You haven't filled out the above form properly yet, so the following HTML is invalid.
+</div>
 
 <pre id="badge-html"></pre>
+
+<div class="valid-form-only">
+  <p>Note that in order for the <strong>Push to Backpack</strong> button in
+    the above snippet to work, you need to add the following script tags to
+    your webpage:</p>
+  <pre id="script-html"></pre>
+</div>
 
 <form action="/assertion">
   <fieldset>
@@ -80,6 +104,7 @@
     <a class="u-issuer p-issuer-name"></a>,
     in recognition of their awesomeness.
   </p>
+  <input type="button" data-issue-html-badge value="Push to Backpack"/>
 </div></div>
 </div>
 
@@ -88,6 +113,7 @@
 <script src="google-code-prettify/prettify.js"></script>
 <script>
 var SALT = "deadsea";
+var ISSUER_JS_API_URL = "http://backpack.openbadges.org/issuer.js";
 
 var today = moment().format("YYYY-MM-DD");
 var buildForm = $("#build");
@@ -131,12 +157,28 @@ function generateBadge() {
   $("#badge-html").textContent = $("#badge-template").innerHTML;
   $("#badge-html").innerHTML = prettyPrintOne($("#badge-html").innerHTML,
                                                 'html');
+
+  $("#issuer-domain").setAttribute("href", $("[name=issuer]").value);
+  $("#issuer-domain").textContent = $("#issuer-domain").host;
+
+  document.body.classList.toggle("valid-form", buildForm.checkValidity());
+}
+
+function populateScriptHtml() {
+  var ourJsApiUrl = location.protocol + '//' + location.host +
+                    '/html-issuer.js';
+  var html = '<script src="' + ISSUER_JS_API_URL + '"></' + 'script>\n' +
+             '<script src="' + ourJsApiUrl + '"></' + 'script>';
+  $("#script-html").textContent = html;
+  $("#script-html").innerHTML = prettyPrintOne($("#script-html").innerHTML,
+                                               'html');
 }
 
 $("[name=issuance]").setAttribute("placeholder", today);
 
 buildForm.addEventListener("keyup", generateBadge, false);
 buildForm.addEventListener("change", generateBadge, false);
+populateScriptHtml();
 
 onload = generateBadge;
 </script>
