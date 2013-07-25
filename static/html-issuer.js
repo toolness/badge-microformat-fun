@@ -1,4 +1,6 @@
 (function() {
+  if (window.OpenBadgesMicroformatBridge) return;
+
   var me = document.querySelector('script[src$="/html-issuer.js"]');
   var myOrigin = me.src.match(/^(.*)\/html-issuer.js/)[1];
 
@@ -23,4 +25,6 @@
       }
     }
   }, true);
+
+  window.OpenBadgesMicroformatBridge = {};
 })();
