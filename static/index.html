@@ -123,6 +123,19 @@ function $(selector, element) {
   return (element || document).querySelector(selector);
 }
 
+function slugify(url) {
+  var slug = [];
+
+  url.split('').forEach(function(character) {
+    if (character.match(/[A-Za-z0-9]/))
+      return slug.push(character.toLowerCase());
+    if (character == ' ')
+      return slug.push('-');
+  });
+
+  return slug.join('');
+}
+
 function generateBadge() {
   var recipientUrl;
   var issueDate = moment($("[name=issuance]").value.trim() || today,
@@ -153,6 +166,9 @@ function generateBadge() {
 
   $(".u-issuer", badge).setAttribute("href", $("[name=issuer]").value);
   $(".p-issuer-name", badge).textContent = $("[name=issuer-name]").value;
+
+  badge.setAttribute("id", slugify($("[name=name]").value + ' for ' +
+                                   $("[name=recipient-name]").value));
 
   $("#badge-html").textContent = $("#badge-template").innerHTML;
   $("#badge-html").innerHTML = prettyPrintOne($("#badge-html").innerHTML,
