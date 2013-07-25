@@ -16,7 +16,7 @@
         <input class="input-xlarge" type="text" name="name" required>
 
         <label>Badge Image URL</label>
-        <input class="input-xlarge" type="text" name="image" placeholder="http://" required>
+        <input class="input-xlarge" type="url" name="image" placeholder="http://" required>
 
         <label>Short Badge Description</label>
         <input class="input-xlarge" type="text" name="description" required>
@@ -26,7 +26,7 @@
         <input class="input-xlarge" type="text" name="recipient-name" required>
 
         <label>Recipient Email</label>
-        <input class="input-xlarge" type="text" name="recipient" required>
+        <input class="input-xlarge" type="email" name="recipient" required>
 
         <label class="checkbox">
           <input type="checkbox" name="hash"> Hash Recipient Email
@@ -41,7 +41,7 @@
         <input class="input-xlarge" type="text" name="issuer-name" required>
 
         <label>Issuer URL</label>
-        <input class="input-xlarge" type="text" name="issuer" placeholder="http://" required>
+        <input class="input-xlarge" type="url" name="issuer" placeholder="http://" required>
         <span class="help-block">Note that the badge HTML <em>must</em> be hosted at the issuer's domain, or it will be invalid.</span>
       </div>
   </fieldset>
@@ -56,7 +56,7 @@
     <legend>Validate a Badge</legend>
 
     <label>URL</label>
-    <input class="input-xlarge" type="text" name="url">
+    <input class="input-xlarge" type="url" name="url" placeholder="http://">
 
     <label>Test HTML (optional)</label>
     <textarea class="input-block-level" rows="20" name="testHtml"></textarea>
