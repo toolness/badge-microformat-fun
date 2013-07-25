@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.min.css">
 <link rel="stylesheet" href="google-code-prettify/prettify.css">
 <title>Badge Microformat Fun</title>
 <div class="container">
@@ -11,39 +10,44 @@
   <fieldset>
     <legend>Build a Badge</legend>
 
-    <label>Badge Name</label>
-    <input class="input-xlarge" type="text" name="name" required>
+    <div class="row">
+      <div class="span4">
+        <label>Badge Name</label>
+        <input class="input-xlarge" type="text" name="name" required>
 
-    <label>Badge Image URL</label>
-    <input class="input-xlarge" type="text" name="image" placeholder="http://" required>
+        <label>Badge Image URL</label>
+        <input class="input-xlarge" type="text" name="image" placeholder="http://" required>
 
-    <label>Short Badge Description</label>
-    <input class="input-xlarge" type="text" name="description" required>
+        <label>Short Badge Description</label>
+        <input class="input-xlarge" type="text" name="description" required>
+      </div>
+      <div class="span4">
+        <label>Recipient Name</label>
+        <input class="input-xlarge" type="text" name="recipient-name" required>
 
-    <label>Recipient Name</label>
-    <input class="input-xlarge" type="text" name="recipient-name" required>
+        <label>Recipient Email</label>
+        <input class="input-xlarge" type="text" name="recipient" required>
 
-    <label>Recipient Email</label>
-    <input class="input-xlarge" type="text" name="recipient" required>
+        <label class="checkbox">
+          <input type="checkbox" name="hash"> Hash Recipient Email
+        </label>
+        <span class="help-block">Hashing the recipient's email address prevents it from being publicly known, while still allowing the badge's issuance to be verified.</span>
+      </div>
+      <div class="span4">
+        <label>Issuance Date</label>
+        <input class="input-small" type="text" name="issuance">
 
-    <label class="checkbox">
-      <input type="checkbox" name="hash"> Hash Recipient Email
-    </label>
-    <span class="help-block">Hashing the recipient's email address prevents it from being publicly known, while still allowing the badge's issuance to be verified.</span>
+        <label>Issuer Name</label>
+        <input class="input-xlarge" type="text" name="issuer-name" required>
 
-    <label>Issuance Date</label>
-    <input class="input-small" type="text" name="issuance">
-
-    <label>Issuer Name</label>
-    <input class="input-xlarge" type="text" name="issuer-name" required>
-
-    <label>Issuer URL</label>
-    <input class="input-xlarge" type="text" name="issuer" placeholder="http://" required>
-    <span class="help-block">Note that the badge HTML <em>must</em> be hosted at the issuer's domain, or it will be invalid.</span>
+        <label>Issuer URL</label>
+        <input class="input-xlarge" type="text" name="issuer" placeholder="http://" required>
+        <span class="help-block">Note that the badge HTML <em>must</em> be hosted at the issuer's domain, or it will be invalid.</span>
+      </div>
   </fieldset>
 </form>
 
-<h3>Badge HTML</h3>
+<p>Below is your badge's HTML.</p>
 
 <pre id="badge-html"></pre>
 
