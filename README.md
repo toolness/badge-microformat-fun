@@ -29,12 +29,6 @@ All fields are required.
 Note that I'm very new to microformats, so this specification is surely
 horrible in certain ways. Feedback is welcome.
 
-### Multiple Badges Per Page
-
-Multiple badges can be placed on a single page, but each `h-badge` must
-be given its own unique `id`. This `id` can then be specified in the hash
-portion of a URL to ensure that each individual badge has a unique URL.
-
 ### Example
 
 ```html
@@ -54,6 +48,12 @@ portion of a URL to ensure that each individual badge has a unique URL.
   </p>
 </div>
 ```
+
+### Multiple Badges Per Page
+
+Multiple badges can be placed on a single page, but each `h-badge` must
+be given its own unique `id`. This `id` can then be specified in the hash
+portion of a URL to ensure that each individual badge has a unique URL.
 
 ### The `hmailto:` scheme
 
@@ -122,7 +122,7 @@ $ node app.js
 
 Then visit http://localhost:3000 to use the bridge server.
 
-Alternatively, you could also just visit
+Alternatively, you could just visit
 [badge-bridge.herokuapp.com](https://badge-bridge.herokuapp.com/).
 
   [recipient]: http://microformats.org/wiki/hcard
