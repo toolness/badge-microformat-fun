@@ -71,7 +71,7 @@ As an example, the hashed email for foo@bar.com can be represented like so
 
 ```
 hmailto:59f82c7054c3695e8d49f76f27c1ae1e14b3988433c4f255016ad24c4f0f9fa7
-?hashfunc=sha256&amp;salt=deadsea
+?hashfunc=sha256&salt=deadsea
 ```
 
   [recipient]: http://microformats.org/wiki/hcard
