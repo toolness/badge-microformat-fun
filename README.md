@@ -12,6 +12,7 @@ This is a simple proof of concept that converts a proposed badge
   to the JSON blob.
 * The unity between metadata and presentation also helps ensure that the two
   don't fall out-of-sync.
+* See the [blog post][].
 
 ## Proposed Badge Microformat
 
@@ -131,6 +132,7 @@ Then visit http://localhost:3000 to use the bridge server.
 Alternatively, you could just visit
 [badge-bridge.herokuapp.com](https://badge-bridge.herokuapp.com/).
 
+  [blog post]: http://www.toolness.com/wp/2013/07/a-html-microformat-for-open-badges/
   [recipient]: http://microformats.org/wiki/hcard
   [microformat]: http://microformats.org/
   [0.5]: https://github.com/mozilla/openbadges/wiki/Assertion-Specification-Changes
