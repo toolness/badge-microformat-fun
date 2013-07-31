@@ -7,8 +7,9 @@ This is a simple proof of concept that converts a proposed badge
   JSON badge assertions are the other way around.
 * For non-technical users, it's not hard to host arbitrary HTML via services
   like blogs, but it is non-trivial to host JSON.
-* Only one HTML page is required, rather than an HTML page that
-  uses the [issuer API][] to point to a different JSON URL.
+* Only one HTML page is required, rather than a machine-readable JSON blob
+  hosted separately from an HTML page that uses the [issuer API][] to point
+  to the JSON blob.
 * The unity between metadata and presentation also helps ensure that the two
   don't fall out-of-sync.
 
@@ -28,31 +29,6 @@ All fields are required.
 Note that I'm very new to microformats, so this specification is surely
 horrible in certain ways. Feedback is welcome.
 
-### The `hmailto:` scheme
-
-There doesn't seem to be an existing way to represent a hashed email in
-HTML, and since the content of a hashed email address isn't
-very human-readable, I decided represent it via a bespoke URL scheme with the
-following format:
-
-<code>hmailto:**hash**?hashfunc=**hashfunc**&salt=**salt**</code>
-
-where
-
-* <code>**hash**</code> is the hex-encoded salted hash of the user's email,
-* <code>**hashfunc**</code> is the name of the hash function used
-  (e.g., `sha256`), and
-* <code>**salt**</code> is the name of the salt appended to the user's email
-  before hashing.
-
-As an example, the hashed email for foo@bar.com can be represented like so
-(ignoring extraneous whitespace):
-
-```
-hmailto:59f82c7054c3695e8d49f76f27c1ae1e14b3988433c4f255016ad24c4f0f9fa7
-?hashfunc=sha256&amp;salt=deadsea
-```
-
 ### Example
 
 ```html
@@ -71,6 +47,31 @@ hmailto:59f82c7054c3695e8d49f76f27c1ae1e14b3988433c4f255016ad24c4f0f9fa7
     in recognition of their awesomeness.
   </p>
 </div>
+```
+
+### The `hmailto:` scheme
+
+There doesn't seem to be an existing way to represent a hashed email in
+HTML, and since the content of a hashed email address isn't
+very human-readable, I decided represent it via a bespoke URL scheme with the
+following format:
+
+<code>hmailto:<strong>hash</strong>?hashfunc=<strong>hashfunc</strong>&salt=<strong>salt</strong></code>
+
+where
+
+* <code>**hash**</code> is the hex-encoded salted hash of the user's email,
+* <code>**hashfunc**</code> is the name of the hash function used
+  (e.g., `sha256`), and
+* <code>**salt**</code> is the name of the salt appended to the user's email
+  before hashing.
+
+As an example, the hashed email for foo@bar.com can be represented like so
+(ignoring extraneous whitespace):
+
+```
+hmailto:59f82c7054c3695e8d49f76f27c1ae1e14b3988433c4f255016ad24c4f0f9fa7
+?hashfunc=sha256&amp;salt=deadsea
 ```
 
   [recipient]: http://microformats.org/wiki/hcard
