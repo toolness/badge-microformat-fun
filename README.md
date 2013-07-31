@@ -95,20 +95,26 @@ ensure that badge microformats can't be spoofed.
 
 ### Limitations
 
-This proof-of-concept "bridge" server provides an endpoint that allows HTML
-microformat badges other domains to be delivered as standard JSON badge
-assertions. However, as a result, the issuer origin will be whatever the
-origin of the bridge server is, rather than the origin of the site that hosts
-the badge HTML. This can only be resolved if and when the microformat is
-accepted natively by the Open Badges standard (and thus by badge backpacks).
+* This proof-of-concept "bridge" server provides an endpoint that allows HTML
+  microformat badges other domains to be delivered as standard JSON badge
+  assertions. However, as a result, the issuer origin will be whatever the
+  origin of the bridge server is, rather than the origin of the site that
+  hosts the badge HTML. This can only be resolved if and when the microformat
+  is accepted natively by the Open Badges standard (and thus by badge
+  backpacks).
 
-Also, at present HTML badges should only be hosted on pages that are also
-permalinks. This means that if they're hosted on blogs, they should appear
-"after the jump", in a section of a post that isn't visible on the front
-page of a blog. (In the future, there should be a way to optionally specify
-the permalink for a badge inside the badge itself. This way, regardless of
-where the badge is viewed, a pointer to its canonical location will always
-be available.)
+* At present HTML badges should only be hosted on pages that are also
+  permalinks. This means that if they're hosted on blogs, they should appear
+  "after the jump", in a section of a post that isn't visible on the front
+  page of a blog. (In the future, there should be a way to optionally specify
+  the permalink for a badge inside the badge itself. This way, regardless of
+  where the badge is viewed, a pointer to its canonical location will always
+  be available.)
+
+* There is currently no way to specify a criteria URL in the 
+  microformat; the bridge simply uses the URL of the page the microformat
+  is hosted on as both the criteria and evidence. We might want to add an
+  optional `u-criteria` field to the microformat to accommodate for this.
 
 ## Quick Start
 
