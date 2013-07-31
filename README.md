@@ -29,6 +29,12 @@ All fields are required.
 Note that I'm very new to microformats, so this specification is surely
 horrible in certain ways. Feedback is welcome.
 
+### Multiple Badges Per Page
+
+Multiple badges can be placed on a single page, but each `h-badge` must
+be given its own unique `id`. This `id` can then be specified in the hash
+portion of a URL to ensure that each individual badge has a unique URL.
+
 ### Example
 
 ```html
@@ -74,8 +80,39 @@ hmailto:59f82c7054c3695e8d49f76f27c1ae1e14b3988433c4f255016ad24c4f0f9fa7
 ?hashfunc=sha256&salt=deadsea
 ```
 
+### Security
+
+One potential vulnerability of using a microformat for issuing badges is
+that third parties may be able to "spoof" badges on another domain, if
+third-party HTML is allowed. For instance, a bad actor could place an
+HTML-microformatted badge in a comment on a blog post at foo.wordpress.com
+to appear as though foo.wordpress.com issued it.
+
+At the machine level, we can assert that `u-issuer` must be in an `<a>` tag
+that has no `rel=nofollow` attribute on it. Since content management systems
+always add [nofollow][] to links provided by third parties, this should help
+ensure that badge microformats can't be spoofed.
+
+### Limitations
+
+This proof-of-concept "bridge" server provides an endpoint that allows HTML
+microformat badges other domains to be delivered as standard JSON badge
+assertions. However, as a result, the issuer origin will be whatever the
+origin of the bridge server is, rather than the origin of the site that hosts
+the badge HTML. This can only be resolved if and when the microformat is
+accepted natively by the Open Badges standard (and thus by badge backpacks).
+
+Also, at present HTML badges should only be hosted on pages that are also
+permalinks. This means that if they're hosted on blogs, they should appear
+"after the jump", in a section of a post that isn't visible on the front
+page of a blog. (In the future, there should be a way to optionally specify
+the permalink for a badge inside the badge itself. This way, regardless of
+where the badge is viewed, a pointer to its canonical location will always
+be available.)
+
   [recipient]: http://microformats.org/wiki/hcard
   [microformat]: http://microformats.org/
   [0.5]: https://github.com/mozilla/openbadges/wiki/Assertion-Specification-Changes
   [issuer API]: https://github.com/mozilla/openbadges/wiki/Issuer-API
   [h-card]: http://microformats.org/wiki/h-card
+  [nofollow]: http://en.wikipedia.org/wiki/Nofollow
