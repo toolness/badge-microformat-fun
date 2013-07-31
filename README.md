@@ -110,6 +110,18 @@ the permalink for a badge inside the badge itself. This way, regardless of
 where the badge is viewed, a pointer to its canonical location will always
 be available.)
 
+## Quick Start
+
+```bash
+$ git clone https://github.com/toolness/badge-microformat-fun.git
+$ cd badge-microformat-fun
+$ npm install
+$ npm test
+$ node app.js
+```
+
+Then visit http://localhost:3000 to use the bridge server.
+
   [recipient]: http://microformats.org/wiki/hcard
   [microformat]: http://microformats.org/
   [0.5]: https://github.com/mozilla/openbadges/wiki/Assertion-Specification-Changes
