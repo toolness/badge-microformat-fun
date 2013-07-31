@@ -35,7 +35,7 @@ HTML, and since the content of a hashed email address isn't
 very human-readable, I decided represent it via a bespoke URL scheme with the
 following format:
 
-  <code>hmailto:**hash**?hashfunc=**hashfunc**&salt=**salt**</code>
+<code>hmailto:**hash**?hashfunc=**hashfunc**&salt=**salt**</code>
 
 where
 
