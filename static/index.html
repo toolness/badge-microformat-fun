@@ -68,13 +68,6 @@ body.valid-form .invalid-form-only {
 
 <pre id="badge-html" contenteditable spellcheck="false"></pre>
 
-<div class="valid-form-only">
-  <p>Note that in order for the <strong>Push to Backpack</strong> button in
-    the above snippet to work, you need to add the following script tags to
-    your webpage:</p>
-  <pre id="script-html" contenteditable spellcheck="false"></pre>
-</div>
-
 <form action="/assertion">
   <fieldset>
     <legend>Validate a Badge</legend>
@@ -104,7 +97,7 @@ body.valid-form .invalid-form-only {
     <a class="u-issuer p-issuer-name"></a>,
     in recognition of their awesomeness.
   </p>
-  <input type="button" data-issue-html-badge value="Push to Backpack"/>
+  <!-- script tag goes here -->
 </div></div>
 </div>
 
@@ -113,7 +106,6 @@ body.valid-form .invalid-form-only {
 <script src="google-code-prettify/prettify.js"></script>
 <script>
 var SALT = "deadsea";
-var ISSUER_JS_API_URL = "http://backpack.openbadges.org/issuer.js";
 
 var today = moment().format("YYYY-MM-DD");
 var buildForm = $("#build");
@@ -170,7 +162,9 @@ function generateBadge() {
   badge.setAttribute("id", slugify($("[name=name]").value + ' for ' +
                                    $("[name=recipient-name]").value));
 
-  $("#badge-html").textContent = $("#badge-template").innerHTML;
+  var html = addScriptHtml($("#badge-template").innerHTML);
+
+  $("#badge-html").textContent = html;
   $("#badge-html").innerHTML = prettyPrintOne($("#badge-html").innerHTML,
                                                 'html');
 
@@ -180,21 +174,18 @@ function generateBadge() {
   document.body.classList.toggle("valid-form", buildForm.checkValidity());
 }
 
-function populateScriptHtml() {
+function addScriptHtml(html) {
   var ourJsApiUrl = location.protocol + '//' + location.host +
                     '/html-issuer.js';
-  var html = '<script src="' + ISSUER_JS_API_URL + '"></' + 'script>\n' +
-             '<script src="' + ourJsApiUrl + '"></' + 'script>';
-  $("#script-html").textContent = html;
-  $("#script-html").innerHTML = prettyPrintOne($("#script-html").innerHTML,
-                                               'html');
+  var scriptHtml = '<script src="' + ourJsApiUrl + '" data-push-badge></' +
+                   'script>';
+  return html.replace('<!-- script tag goes here -->', scriptHtml);
 }
 
 $("[name=issuance]").setAttribute("placeholder", today);
 
 buildForm.addEventListener("keyup", generateBadge, false);
 buildForm.addEventListener("change", generateBadge, false);
-populateScriptHtml();
 
 onload = generateBadge;
 </script>

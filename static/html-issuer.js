@@ -1,8 +1,7 @@
 (function() {
-  if (window.OpenBadgesMicroformatBridge) return;
-
-  var me = document.querySelector('script[src$="/html-issuer.js"]');
-  var myOrigin = me.src.match(/^(.*)\/html-issuer.js/)[1];
+  // http://davidwalsh.name/script-tag
+  var allScripts = document.getElementsByTagName("script");
+  var me = allScripts[allScripts.length - 1];
 
   function getClosestAncestor(element, className) {
     if (!element) return null;
@@ -10,9 +9,30 @@
     return getClosestAncestor(element.parentElement, className);
   }
 
-  window.addEventListener("click", function(event) {
-    if (event.target.hasAttribute('data-issue-html-badge')) {
-      var hBadge = getClosestAncestor(event.target, 'h-badge');
+  function maybeInjectIssuerApi() {
+    var ISSUER_JS_API_URL = "//backpack.openbadges.org/issuer.js";
+
+    if (window.OpenBadges) return;
+
+    for (var i = 0; i < allScripts.length; i++) {
+      if (allScripts[i].getAttribute("src") == ISSUER_JS_API_URL)
+        return;
+    }
+
+    var script = document.createElement("script");
+    script.setAttribute("src", ISSUER_JS_API_URL);
+    me.parentNode.appendChild(script);
+  }
+
+  function replaceWithButton(script) {
+    var button = document.createElement('button');
+    var myOrigin = script.src.match(/^(.*)\/html-issuer.js/)[1];
+
+    button.textContent = "Push to backpack";
+    button.onclick = function(event) {
+      event.preventDefault();
+
+      var hBadge = getClosestAncestor(this, 'h-badge');
       if (hBadge) {
         var id = hBadge.getAttribute('id') || '';
         var pageURL = location.protocol + '//' +
@@ -21,10 +41,14 @@
         var assertionURL = myOrigin + '/assertion?url=' + 
                            encodeURIComponent(pageURL);
         OpenBadges.issue([assertionURL]);
-        event.preventDefault();
       }
-    }
-  }, true);
+    };
+    script.parentNode.replaceChild(button, script);    
+  }
 
-  window.OpenBadgesMicroformatBridge = {};
+  if (!me.hasAttribute('data-push-badge'))
+    return;
+
+  maybeInjectIssuerApi();
+  replaceWithButton(me);
 })();
