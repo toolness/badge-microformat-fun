@@ -122,6 +122,9 @@ $ node app.js
 
 Then visit http://localhost:3000 to use the bridge server.
 
+Alternatively, you could also just visit
+[badge-bridge.herokuapp.com](https://badge-bridge.herokuapp.com/).
+
   [recipient]: http://microformats.org/wiki/hcard
   [microformat]: http://microformats.org/
   [0.5]: https://github.com/mozilla/openbadges/wiki/Assertion-Specification-Changes
